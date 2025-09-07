@@ -83,12 +83,15 @@ document.addEventListener("DOMContentLoaded", () => {
     },
   });
   // const API_BASE = window.NAT_API || "http://localhost:3000";
-  const API_BASE =
+
+const API_BASE =
   window.NAT_API ||
   (window.location.hostname === "localhost"
     ? "http://localhost:3000"
-    : "https://online-quiz-system-t7it.onrender.com"); // ✅ deployed backend
+    : "https://online-quiz-system-t7it.onrender.com");
 
+console.log("NAT_API in window:", window.NAT_API);
+console.log("API_BASE is:", API_BASE);
 
 
   // 🔹 Call your backend AI server (DeepSeek free model)
