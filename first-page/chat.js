@@ -80,11 +80,12 @@ document.addEventListener("DOMContentLoaded", () => {
       }, 280);
     },
   });
+  const API_BASE = window.NAT_API || "http://localhost:3000";
 
   // 🔹 Call your backend AI server (DeepSeek free model)
   async function fetchAIResponse(message) {
     try {
-      const res = await fetch("http://localhost:3000/chat", {
+      const res = await fetch(`${API_BASE}/chat`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ message }),
