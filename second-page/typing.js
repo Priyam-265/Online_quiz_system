@@ -1,0 +1,22 @@
+document.addEventListener("DOMContentLoaded",function(){
+    const btn=document.getElementById("btn");
+    btn.addEventListener("click",()=>{
+        console.log("clicked");
+        gsap.to("#txt",{
+            opacity:0,
+            y:-20,
+            duration:1,
+            ease:"power3.out",
+            stagger:0.2,
+            delay:0.4
+        });
+        gsap.to("#btn",{
+           opacity:0,
+            y:-10,
+            duration:1,
+            ease:"power3.out",
+            stagger:0.2,
+            delay:0.6
+        })
+    })
+})

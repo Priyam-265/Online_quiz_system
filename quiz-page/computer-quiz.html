@@ -1,0 +1,495 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Computer Science Quiz</title>
+    <link href="https://fonts.googleapis.com/css2?family=Be+Vietnam+Pro:wght@300;400;500;600;700&display=swap"
+        rel="stylesheet">
+    <link
+        href="https://db.onlinewebfonts.com/c/554de251fec51511723effebd5d0ed84?family=Roslindale+Display+Condensed+Medium"
+        rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js"></script>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    fontFamily: {
+                        'vietnam': ['Be Vietnam Pro', 'sans-serif'],
+                        'roslindale': ['Roslindale Display Condensed Medium', 'serif']
+                    },
+                    colors: {
+                        'primary-bg': '#c5c0b2',
+                        'secondary-bg': '#ffffff',
+                        'text-primary': '#000000',
+                        'text-secondary': '#333333',
+                        'accent': '#8a8170',
+                        'nav-bg': 'rgba(197, 192, 178, 0.95)'
+                    },
+                    animation: {
+                        'indicator': 'indicator 1s both',
+                        'indicator-completed': 'indicator-completed 0.4s 0.8s both',
+                        'result': 'result 0.6s 0.5s both',
+                        'result-item': 'result-item 0.6s 1.3s both'
+                    }
+                }
+            },
+            darkMode: 'class'
+        }
+    </script>
+    <style>
+        /* Custom animations and special styles that can't be replicated with Tailwind */
+        @keyframes indicator {
+
+            0%,
+            100% {
+                opacity: 1;
+            }
+
+            50% {
+                height: 6px;
+            }
+
+            100% {
+                height: 40px;
+                top: -2px;
+                left: -2px;
+                background-color: #8a8170;
+            }
+
+            80% {
+                background-color: #000000;
+            }
+
+            50%,
+            100% {
+                width: calc(100% + 1px);
+            }
+        }
+
+        @keyframes indicator-completed {
+
+            70%,
+            100% {
+                opacity: 1;
+            }
+
+            100% {
+                transform: translateY(10px);
+            }
+        }
+
+        @keyframes result {
+            0% {
+                height: 0;
+            }
+
+            100% {
+                height: 150px;
+            }
+        }
+
+        @keyframes result-item {
+            0% {
+                opacity: 0;
+                transform: translateY(10px);
+            }
+        }
+
+        .indicator-item:last-child::before {
+            background: var(--text-primary);
+            content: "";
+            width: 12px;
+            height: 4px;
+            position: absolute;
+            border-radius: 6px;
+            left: 0;
+            top: 0;
+            opacity: 0;
+        }
+
+        .indicator-item:last-child::after {
+            content: "COMPLETED";
+            position: absolute;
+            width: 100%;
+            left: 0;
+            font-size: 14px;
+            letter-spacing: 1px;
+            font-weight: 600;
+            top: 0;
+            opacity: 0;
+            color: var(--text-primary);
+        }
+
+        .indicator-item:last-child.completed::before {
+            animation: indicator 1s both;
+        }
+
+        .indicator-item:last-child.completed::after {
+            animation: indicator-completed 0.4s 0.8s both;
+        }
+
+        .question label::before {
+            height: 16px;
+            background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' width='24' height='24' stroke='%232c2c2c' stroke-width='3' fill='none' stroke-linecap='round' stroke-linejoin='round' class='css-i6dzq1'%3E%3Cpolyline points='20 6 9 17 4 12'%3E%3C/polyline%3E%3C/svg%3E");
+            content: "";
+            background-size: cover;
+            opacity: 0.5;
+            transition: 0.3s;
+            flex-shrink: 0;
+            position: absolute;
+            right: -16px;
+            top: 50%;
+            transform: translateY(-50%);
+            width: 16px;
+        }
+
+        .question input:checked+label::before {
+            transform: translateX(-24px) translateY(-50%);
+        }
+
+        .is-true label::before {
+            background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' width='24' height='24' stroke='%238a8170' stroke-width='3' fill='none' stroke-linecap='round' stroke-linejoin='round' class='css-i6dzq1'%3E%3Cpolyline points='20 6 9 17 4 12'%3E%3C/polyline%3E%3C/svg%3E");
+            opacity: 1;
+            transform: translateX(-24px) translateY(-50%);
+        }
+
+        .correction [data-selected="true"].is-true label::before {
+            background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' width='24' height='24' stroke='%234a7c59' stroke-width='3' fill='none' stroke-linecap='round' stroke-linejoin='round' class='css-i6dzq1'%3E%3Cpolyline points='20 6 9 17 4 12'%3E%3C/polyline%3E%3C/svg%3E");
+            opacity: 1;
+            transform: translateX(-24px) translateY(-50%);
+        }
+
+        .correction [data-selected="true"]:not(.is-true) label::before {
+            opacity: 1;
+            background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' width='24' height='24' stroke='%23ff6161' stroke-width='3' fill='none' stroke-linecap='round' stroke-linejoin='round' class='css-i6dzq1'%3E%3Cline x1='18' y1='6' x2='6' y2='18'%3E%3C/line%3E%3Cline x1='6' y1='6' x2='18' y2='18'%3E%3C/line%3E%3C/svg%3E");
+        }
+
+        [data-game-finished] .result {
+            opacity: 1;
+            margin-top: 2.5rem;
+            padding-top: 1.25rem;
+            display: flex;
+            animation: result 0.6s 0.5s both;
+        }
+
+        [data-game-finished] .result-item {
+            animation: result-item 0.6s 1.3s both;
+        }
+
+        [data-game-finished] .result-item.is-correct {
+            animation-delay: 1s;
+        }
+
+        [data-game-finished] .result-item.is-wrong {
+            animation-delay: 1.15s;
+        }
+
+        [data-game-finished] .restart-button {
+            display: block;
+            animation: result-item 0.4s 1.45s both;
+        }
+        /* Additional custom styles that complement Tailwind classes */
+
+/* Game state transitions */
+.game[data-game-started] .intro {
+    width: calc(50% - 100px);
+    transition: 0.3s;
+}
+
+@media (max-width: 980px), (max-height: 580px) {
+    .game[data-game-started] .intro {
+        width: 100%;
+        height: auto;
+    }
+}
+
+.game[data-game-started] .intro-inner {
+    padding: 20px;
+}
+
+@media (max-width: 980px), (max-height: 580px) {
+    .game[data-game-started] .intro-inner {
+        padding: 40px 20px;
+    }
+}
+
+.game[data-game-started] .game-area {
+    flex-shrink: 0;
+    width: calc(50% + 100px);
+    display: flex;
+    align-items: center;
+    flex-wrap: wrap;
+    transition: 0.3s;
+    flex-grow: 1;
+}
+
+@media (max-width: 980px), (max-height: 580px) {
+    .game[data-game-started] .game-area {
+        width: 100%;
+        padding: 20px;
+    }
+}
+
+/* Indicator items */
+.indicator-item {
+    width: 12px;
+    height: 4px;
+    border-radius: 6px;
+    background-color: var(--text-secondary);
+    position: relative;
+}
+
+.indicator-item + .indicator-item {
+    margin-left: 8px;
+}
+
+/* Question styling */
+.question {
+    display: flex;
+    height: 100%;
+    flex-direction: column;
+    width: 100%;
+}
+
+.question-inner {
+    margin: auto 0;
+}
+
+.question-answers {
+    padding: 0;
+    list-style: none;
+}
+
+.question li,
+.question-text {
+    opacity: 0;
+}
+
+.question-text {
+    color: var(--text-primary);
+    margin: 20px 0;
+}
+
+.question input {
+    display: none;
+}
+
+.question label {
+    display: flex;
+    padding: 12px 24px 12px 16px;
+    font-size: 15px;
+    border-radius: 4px;
+    overflow: hidden;
+    align-items: center;
+    border: 2px solid rgba(138, 129, 112, 0.3);
+    color: var(--text-primary);
+    cursor: pointer;
+    position: relative;
+    background-color: rgba(255, 255, 255, 0.9);
+    transition: all 0.3s ease;
+}
+
+.question li + li {
+    margin-top: 10px;
+}
+
+.question input:checked + label {
+    background-color: rgba(138, 129, 112, 0.15);
+    border-color: var(--accent-color);
+}
+
+.is-true label {
+    background-color: rgba(138, 129, 112, 0.2);
+    border-color: var(--accent-color);
+}
+
+/* Correction styles */
+.correction {
+    width: 100%;
+}
+
+.correction [data-selected="true"].is-true label {
+    border-color: #4a7c59;
+    background-color: #d4edda;
+}
+
+.correction [data-selected="true"]:not(.is-true) label {
+    background-color: #ffd5dc;
+    border: 2px solid #ff6161;
+}
+
+.correction input {
+    pointer-events: none;
+}
+
+.correction .question + .question {
+    margin-top: 30px;
+}
+
+/* Question button */
+.question-button {
+    background-color: var(--accent-color);
+    border: 0;
+    padding: 14px 26px;
+    color: var(--text-primary);
+    border-radius: 4px;
+    margin-top: 20px;
+    font-size: 16px;
+    cursor: pointer;
+    font-weight: 500;
+}
+
+/* Dark mode variables */
+@media (prefers-color-scheme: dark) {
+    :root {
+        --bg-primary: #000000;
+        --bg-secondary: #0a0a0a;
+        --text-primary: #ffffff;
+        --text-secondary: #e5e5e5;
+        --accent-color: #c5c0b2;
+        --card-bg: rgba(197, 192, 178, 0.1);
+        --card-border: rgba(197, 192, 178, 0.3);
+        --card-hover: rgba(197, 192, 178, 0.2);
+        --nav-bg: rgba(0, 0, 0, 0.95);
+    }
+}
+
+/* Light mode variables */
+:root {
+    --bg-primary: #c5c0b2;
+    --bg-secondary: #ffffff;
+    --text-primary: #000000;
+    --text-secondary: #333333;
+    --accent-color: #8a8170;
+    --card-bg: rgba(255, 255, 255, 0.9);
+    --card-border: rgba(138, 129, 112, 0.3);
+    --card-hover: rgba(138, 129, 112, 0.15);
+    --nav-bg: rgba(197, 192, 178, 0.95);
+}
+
+/* Responsive adjustments */
+@media (max-width: 980px), (max-height: 580px) {
+    body {
+        padding: 60px 20px;
+    }
+    
+    .game {
+        margin: auto;
+        height: auto;
+        overflow: auto;
+        max-height: 100%;
+    }
+    
+    .game-area {
+        padding: 0;
+    }
+}
+    </style>
+</head>
+
+<body
+    class="font-vietnam bg-primary-bg dark:bg-black text-text-primary dark:text-white h-screen overflow-hidden flex m-0 transition-all duration-300">
+        <nav
+        class="fixed w-full h-[100px] p-10 flex justify-between font-roslindale font-medium text-3xl leading-[100px] mb-20 text-transform: uppercase dark:text-white z-10">
+        <div class="site-logo"><a href="../first-page/index.html">Nexora</a></div>
+        <div class="site-menu flex ">
+          <div class="menu-item ml-7 "><a href="../second-page/index.html">Quiz</a></div>
+          <div class="menu-item ml-7"><a href="../leaderboard/leader1.html">Leaderboard</a></div>
+          <div class="menu-item ml-7"><a href="">Contact</a></div>
+          <div class="menu-item ml-7"><a href="">About</a></div>
+          <div class="menu-item text-black dark:text-white ml-7 mb-1 "><a href=""> <i class="fa-solid fa-user"></i></a>
+          </div>
+        </div>
+      </nav>
+
+    <div id="app" class="w-full h-full flex items-center flex-wrap justify-center">
+        <div class="game relative max-w-6xl w-full h-[70vh] min-h-max my-[15vh] mx-auto shadow-2xl rounded-xl overflow-hidden scroll-smooth flex transition-all duration-300"
+            id="game">
+            <div
+                class="intro bg-secondary-bg dark:bg-zinc-900 h-full w-full flex-shrink-0 text-text-primary dark:text-white bg-center relative flex items-center justify-center border border-accent/30">
+                <button
+                    class="back-button absolute top-5 left-5 bg-accent/20 border border-accent/30 text-text-primary dark:text-white py-2.5 px-5 rounded cursor-pointer text-sm transition-all duration-300 hover:bg-accent/30 hover:-translate-y-0.5 hover:scale-105 hover:shadow-lg"
+                    onclick="window.location.href='../second-page/index.html'">← Back to Subjects</button>
+                <div class="intro-inner text-center py-7.5 px-15 w-full">
+                    <h1 class="intro-title m-0 text-5xl font-roslindale text-shadow">Computer Science Quiz</h1>
+                    <div id="intro-content">
+                        <p class="intro-desc opacity-80 font-light text-text-secondary dark:text-gray-300">The test
+                            contains 10 questions and there is no time limit.</p>
+                        <button
+                            class="intro-button bg-accent border-0 py-3 px-6.5 text-text-primary dark:text-white rounded text-lg translate-y-5 cursor-pointer font-medium shadow-lg disabled:opacity-60 disabled:cursor-not-allowed"
+                            id="startBtn" onclick="startQuiz()">Start Quiz</button>
+                        <div id="loading-message" class="loading-message text-accent font-medium mt-2.5 hidden">Loading
+                            questions...</div>
+                    </div>
+                    <div id="indicator" class="indicator flex justify-center relative max-w-4/5 mt-5 mx-auto hidden">
+                    </div>
+                    <div class="result transition-all duration-300 flex flex-col w-full max-w-4/5 mx-auto h-0 overflow-hidden"
+                        id="result">
+                        <div
+                            class="result-item inline-flex flex-row-reverse justify-between w-full py-1.25 px-2.5 is-correct text-green-400">
+                            <span class="result-count text-3xl font-semibold" id="correct-count">0</span>
+                            <span
+                                class="result-text text-xs tracking-widest opacity-80 flex font-medium items-center leading-none">
+                                <svg width="16" height="16" fill="none" stroke="currentColor" stroke-linecap="round"
+                                    stroke-linejoin="round" stroke-width="2" class="mr-2 relative -top-px"
+                                    viewBox="0 0 24 24">
+                                    <path d="M22 11.08V12a10 10 0 11-5.93-9.14"></path>
+                                    <path d="M22 4L12 14.01 9 11.01"></path>
+                                </svg>
+                                CORRECT
+                            </span>
+                        </div>
+                        <div
+                            class="result-item inline-flex flex-row-reverse justify-between w-full py-1.25 px-2.5 border-t border-accent/20 is-wrong text-red-400">
+                            <span class="result-count text-3xl font-semibold" id="wrong-count">0</span>
+                            <span
+                                class="result-text text-xs tracking-widest opacity-80 flex font-medium items-center leading-none">
+                                <svg width="16" height="16" fill="none" stroke="currentColor" stroke-linecap="round"
+                                    stroke-linejoin="round" stroke-width="2" class="mr-2 relative -top-px"
+                                    viewBox="0 0 24 24">
+                                    <circle cx="12" cy="12" r="10"></circle>
+                                    <path d="M15 9L9 15"></path>
+                                    <path d="M9 9L15 15"></path>
+                                </svg>
+                                WRONG
+                            </span>
+                        </div>
+                        <div
+                            class="result-item inline-flex flex-row-reverse justify-between w-full py-1.25 px-2.5 border-t border-accent/20 is-empty text-gray-400">
+                            <span class="result-count text-3xl font-semibold" id="empty-count">0</span>
+                            <span
+                                class="result-text text-xs tracking-widest opacity-80 flex font-medium items-center leading-none">
+                                <svg width="16" height="16" fill="none" stroke="currentColor" stroke-linecap="round"
+                                    stroke-linejoin="round" stroke-width="2" class="mr-2 relative -top-px"
+                                    viewBox="0 0 24 24">
+                                    <circle cx="12" cy="12" r="10"></circle>
+                                    <path d="M8 12L16 12"></path>
+                                </svg>
+                                EMPTY
+                            </span>
+                        </div>
+                    </div>
+                    <button
+                        class="restart-button h-10 border border-accent/30 mt-7.5 mx-auto bg-transparent text-text-primary dark:text-white rounded px-4 font-medium transition-all duration-300 cursor-pointer hidden hover:bg-accent/10"
+                        onclick="restartQuiz()">Restart Quiz</button>
+                </div>
+            </div>
+            <div class="game-area bg-secondary-bg dark:bg-zinc-900 overflow-auto p-10" id="game-area"></div>
+        </div>
+    </div>
+
+    <!-- Theme toggle button -->
+    <div class="theme-toggle fixed bottom-5 right-5 w-12.5 h-12.5 rounded-full bg-accent flex items-center justify-center cursor-pointer z-50 shadow-lg"
+        id="themeToggle">
+        <i class="fas fa-moon text-text-primary dark:text-white text-xl" id="themeIcon"></i>
+    </div>
+
+    <script src="computer-quiz.js"></script>
+    <script src="coding_animation.js"></script>
+</body>
+
+</html>

@@ -1,0 +1,301 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Nexora - Leaderboard</title>
+
+  <!-- Fonts & Icons -->
+  <link href="https://fonts.googleapis.com/css2?family=Be+Vietnam+Pro:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+  <link href="https://db.onlinewebfonts.com/c/554de251fec51511723effebd5d0ed84?family=Roslindale+Display+Condensed+Medium" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+
+  <!-- Libs -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js"></script>
+  <script src="https://cdn.tailwindcss.com"></script>
+
+  <script>
+    tailwind.config = {
+      darkMode: 'media', // uses prefers-color-scheme
+      theme: {
+        extend: {
+          fontFamily: {
+            roslindale: ['"Roslindale Display Condensed Medium"', 'serif'],
+          },
+          colors: {
+            // Brand accent (works in both themes)
+            primary: '#d7b98f',
+            'primary-hover': '#c2a676',
+            'primary-dark': '#8b7355',
+
+            // Semantic text
+            'text-primary': '#ffffff',  // white (for dark mode text)
+            'text-secondary': '#000000', // black (for light mode text)
+
+            // Page backgrounds
+            'bg-primary': '#c5c0b2', // beige — LIGHT MODE ONLY
+            'bg-secondary': '#000000', // dark background — DARK MODE
+
+            // Surfaces / cards / inputs
+            'surface-light': '#ffffff',
+            'surface-dark': '#151619',
+            'muted-light': '#efefe9',
+            'muted-dark': '#1e2024',
+
+            // Borders
+            'border-light': '#e5e7eb',
+            'border-dark': '#2f3136'
+          }
+        }
+      }
+    }
+  </script>
+
+  <style>
+    .celebration {
+      position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+      pointer-events: none; z-index: 9999;
+    }
+    .celebration-text {
+      position: absolute; top: 40%; left: 50%; transform: translate(-50%, -50%);
+      font-size: 48px; font-weight: bold; color: #d7b98f; text-shadow: 2px 2px 6px rgba(0,0,0,0.2);
+    }
+    .confetti, .confetti-piece { position: absolute; width: 10px; height: 10px; background: #d7b98f; }
+    .popper { position: absolute; width: 20px; height: 20px; background: #d7b98f; border-radius: 50%; }
+  </style>
+</head>
+
+<body class="bg-bg-primary dark:bg-bg-secondary text-text-secondary dark:text-text-primary min-h-screen p-5 overflow-x-hidden">
+
+  <!-- NAV -->
+  <nav class="fixed w-full h-[100px] p-5 flex justify-between font-roslindale font-medium text-3xl leading-[100px] uppercase text-text-secondary dark:text-text-primary z-10">
+        <div class="site-logo"><a href="../first-page/index.html">Nexora</a></div>
+    <div class="site-menu flex gap-12">
+      <div class="menu-item ml-7"><a href="../second-page/index.html">Quiz</a></div>
+      <div class="menu-item ml-7"><a href="">Leaderboard</a></div>
+      <div class="menu-item ml-7"><a href="">Contact</a></div>
+      <div class="menu-item ml-7"><a href="">About</a></div>
+      <div class="menu-item text-text-secondary dark:text-text-primary ml-7 mb-1"><a href=""><i class="fa-solid fa-user"></i></a></div>
+    </div>
+  </nav>
+
+  <section class="up">
+    <div class="max-w-7xl mx-auto">
+      <!-- Header -->
+      <div class="text-center mb-6 mt-32">
+        <h1 class="text-4xl mb-2 font-bold text-text-secondary dark:text-text-primary">Leaderboard</h1>
+        <p class="text-base text-text-secondary dark:text-gray-300">See how you stack up against other quiz enthusiasts! Climb your way to the top with your knowledge.</p>
+      </div>
+
+      <!-- Celebrate Button (unchanged style, consistent in both themes) -->
+      <div class="text-center my-5">
+        <button id="celebrate-btn"
+                class="bg-primary hover:bg-primary-hover text-text-secondary px-5 py-2 rounded-lg border border-transparent cursor-pointer transition-colors duration-300">
+          <i class="fas fa-party-horn"></i> Celebrate Achievement
+        </button>
+      </div>
+
+      <!-- Features -->
+      <div class="flex gap-5 my-8 features">
+        <div class="bg-surface-light dark:bg-surface-dark p-5 rounded-xl flex-1 text-center transition-transform duration-300 hover:-translate-y-1 hover:shadow-lg feature-card">
+          <div class="text-3xl mb-2 text-primary feature-icon"><i class="fas fa-trophy"></i></div>
+          <h3 class="text-lg font-semibold mb-2 text-text-secondary dark:text-text-primary feature-title">Weekly Challenges</h3>
+          <p class="text-text-secondary dark:text-gray-300 feature-desc">Compete in weekly themed quizzes to earn bonus points and special badges.</p>
+        </div>
+        <div class="bg-surface-light dark:bg-surface-dark p-5 rounded-xl flex-1 text-center transition-transform duration-300 hover:-translate-y-1 hover:shadow-lg feature-card">
+          <div class="text-3xl mb-2 text-primary feature-icon"><i class="fas fa-users"></i></div>
+          <h3 class="text-lg font-semibold mb-2 text-text-secondary dark:text-text-primary feature-title">Team Rankings</h3>
+          <p class="text-text-secondary dark:text-gray-300 feature-desc">Join forces with friends and compete as teams to climb the group leaderboard.</p>
+        </div>
+        <div class="bg-surface-light dark:bg-surface-dark p-5 rounded-xl flex-1 text-center transition-transform duration-300 hover:-translate-y-1 hover:shadow-lg feature-card">
+          <div class="text-3xl mb-2 text-primary feature-icon"><i class="fas fa-chart-line"></i></div>
+          <h3 class="text-lg font-semibold mb-2 text-text-secondary dark:text-text-primary feature-title">Progress Tracking</h3>
+          <p class="text-text-secondary dark:text-gray-300 feature-desc">Monitor your improvement over time with detailed stats and performance analytics.</p>
+        </div>
+      </div>
+
+      <div class="flex gap-6">
+        <!-- Filters -->
+        <div class="bg-surface-light dark:bg-surface-dark p-5 rounded-xl w-72 shadow-sm">
+          <h2 class="text-xl mb-4 border-b-2 border-border-light dark:border-border-dark pb-2 text-text-secondary dark:text-text-primary">Filters</h2>
+
+          <div class="mb-5">
+            <h3 class="text-base mb-2 text-text-secondary dark:text-gray-300">Categories</h3>
+            <div class="flex flex-col gap-2">
+              <label class="flex items-center">
+                <input type="checkbox" id="cat1" checked class="mr-2 accent-primary cursor-pointer">
+                <span class="text-text-secondary dark:text-text-primary">Science</span>
+              </label>
+              <label class="flex items-center">
+                <input type="checkbox" id="cat2" checked class="mr-2 accent-primary cursor-pointer">
+                <span class="text-text-secondary dark:text-text-primary">History</span>
+              </label>
+              <label class="flex items-center">
+                <input type="checkbox" id="cat5" checked class="mr-2 accent-primary cursor-pointer">
+                <span class="text-text-secondary dark:text-text-primary">General Knowledge</span>
+              </label>
+              <label class="flex items-center">
+                <input type="checkbox" id="cat6" checked class="mr-2 accent-primary cursor-pointer">
+                <span class="text-text-secondary dark:text-text-primary">Coding</span>
+              </label>
+            </div>
+          </div>
+
+          <div class="mb-5">
+            <h3 class="text-base mb-2 text-text-secondary dark:text-gray-300">Badges</h3>
+            <div class="flex flex-col gap-2">
+              <label class="flex items-center">
+                <input type="checkbox" id="badge1" class="mr-2 accent-primary cursor-pointer">
+                <span class="text-text-secondary dark:text-text-primary">Speed Demon</span>
+              </label>
+              <label class="flex items-center">
+                <input type="checkbox" id="badge2" class="mr-2 accent-primary cursor-pointer">
+                <span class="text-text-secondary dark:text-text-primary">Perfect Score</span>
+              </label>
+              <label class="flex items-center">
+                <input type="checkbox" id="badge3" class="mr-2 accent-primary cursor-pointer">
+                <span class="text-text-secondary dark:text-text-primary">Streak Master</span>
+              </label>
+              <label class="flex items-center">
+                <input type="checkbox" id="badge4" class="mr-2 accent-primary cursor-pointer">
+                <span class="text-text-secondary dark:text-text-primary">Quiz Champion</span>
+              </label>
+            </div>
+          </div>
+
+          <div class="mb-5">
+            <h3 class="text-base mb-2 text-text-secondary dark:text-gray-300">Activity</h3>
+            <div class="flex flex-col gap-2">
+              <label class="flex items-center">
+                <input type="checkbox" id="active1" class="mr-2 accent-primary cursor-pointer">
+                <span class="text-text-secondary dark:text-text-primary">Currently Online</span>
+              </label>
+              <label class="flex items-center">
+                <input type="checkbox" id="active2" class="mr-2 accent-primary cursor-pointer">
+                <span class="text-text-secondary dark:text-text-primary">Played Recently</span>
+              </label>
+            </div>
+          </div>
+        </div>
+
+        <!-- Leaderboard -->
+        <div class="flex-1 bg-surface-light dark:bg-surface-dark p-5 rounded-xl shadow-sm">
+          <div class="flex justify-between mb-5 flex-wrap gap-4">
+            <!-- Search -->
+            <div class="flex items-center border border-border-light dark:border-border-dark px-3 py-2 rounded-lg flex-1 max-w-xs bg-muted-light dark:bg-muted-dark search-box">
+              <i class="fas fa-search mr-2 text-text-secondary dark:text-gray-300"></i>
+              <input type="text" placeholder="Search for a player..." class="border-none outline-none flex-1 bg-transparent text-text-secondary dark:text-text-primary placeholder-text-secondary dark:placeholder-gray-400">
+            </div>
+
+            <!-- Time filters -->
+            <div class="flex gap-1">
+              <button class="bg-primary text-text-secondary px-3 py-2 rounded border border-transparent cursor-pointer transition-colors duration-300 time-filter active">All Time</button>
+              <button class="bg-muted-light dark:bg-surface-dark text-text-secondary dark:text-text-primary px-3 py-2 rounded border border-border-light dark:border-border-dark cursor-pointer transition-colors duration-300 time-filter hover:bg-primary hover:text-text-secondary">Monthly</button>
+              <button class="bg-muted-light dark:bg-surface-dark text-text-secondary dark:text-text-primary px-3 py-2 rounded border border-border-light dark:border-border-dark cursor-pointer transition-colors duration-300 time-filter hover:bg-primary hover:text-text-secondary">Weekly</button>
+              <button class="bg-muted-light dark:bg-surface-dark text-text-secondary dark:text-text-primary px-3 py-2 rounded border border-border-light dark:border-border-dark cursor-pointer transition-colors duration-300 time-filter hover:bg-primary hover:text-text-secondary">Today</button>
+            </div>
+          </div>
+
+          <div class="border border-border-light dark:border-border-dark rounded-lg overflow-hidden">
+            <div class="grid grid-cols-[80px_1fr_120px] px-4 py-3 border-b border-border-light dark:border-border-dark items-center bg-muted-light dark:bg-muted-dark font-bold text-text-secondary dark:text-text-primary">
+              <div>Rank</div>
+              <div>Player</div>
+              <div>Score</div>
+            </div>
+
+            <div class="leaderboard-rows">
+              <div class="grid grid-cols-[80px_1fr_120px] px-4 py-3 border-b border-border-light dark:border-border-dark items-center bg-surface-light dark:bg-surface-dark transition-transform duration-200 hover:scale-[1.01] hover:shadow-md leaderboard-row text-text-secondary dark:text-text-primary" data-category="science">
+                <div class="flex justify-center items-center rank">
+                  <span class="inline-block w-7 h-7 rounded-full text-white text-center leading-7 font-bold bg-yellow-400 medal gold">1</span>
+                </div>
+                <div class="user-info"><div class="username">QuizWhiz</div></div>
+                <div class="score">9850</div>
+              </div>
+
+              <div class="grid grid-cols-[80px_1fr_120px] px-4 py-3 border-b border-border-light dark:border-border-dark items-center bg-surface-light dark:bg-surface-dark transition-transform duration-200 hover:scale-[1.01] hover:shadow-md leaderboard-row text-text-secondary dark:text-text-primary" data-category="history">
+                <div class="flex justify-center items-center rank">
+                  <span class="inline-block w-7 h-7 rounded-full text-white text-center leading-7 font-bold bg-gray-400 medal silver">2</span>
+                </div>
+                <div class="user-info"><div class="username">BrainyBee</div></div>
+                <div class="score">9320</div>
+              </div>
+
+              <div class="grid grid-cols-[80px_1fr_120px] px-4 py-3 border-b border-border-light dark:border-border-dark items-center bg-surface-light dark:bg-surface-dark transition-transform duration-200 hover:scale-[1.01] hover:shadow-md leaderboard-row text-text-secondary dark:text-text-primary" data-category="generalknowledge">
+                <div class="flex justify-center items-center rank">
+                  <span class="inline-block w-7 h-7 rounded-full text-white text-center leading-7 font-bold bg-yellow-700 medal bronze">3</span>
+                </div>
+                <div class="user-info"><div class="username">TriviaTitan</div></div>
+                <div class="score">8760</div>
+              </div>
+
+              <div class="grid grid-cols-[80px_1fr_120px] px-4 py-3 border-b border-border-light dark:border-border-dark items-center bg-surface-light dark:bg-surface-dark transition-transform duration-200 hover:scale-[1.01] hover:shadow-md leaderboard-row text-text-secondary dark:text-text-primary" data-category="science">
+                <div class="flex justify-center items-center rank">4</div>
+                <div class="user-info"><div class="username">WiseOwl</div></div>
+                <div class="score">8450</div>
+              </div>
+
+              <div class="grid grid-cols-[80px_1fr_120px] px-4 py-3 border-b border-border-light dark:border-border-dark items-center bg-surface-light dark:bg-surface-dark transition-transform duration-200 hover:scale-[1.01] hover:shadow-md leaderboard-row text-text-secondary dark:text-text-primary" data-category="history">
+                <div class="flex justify-center items-center rank">5</div>
+                <div class="user-info"><div class="username">KnowledgeKnight</div></div>
+                <div class="score">8120</div>
+              </div>
+
+              <div class="grid grid-cols-[80px_1fr_120px] px-4 py-3 border-b border-border-light dark:border-border-dark items-center bg-surface-light dark:bg-surface-dark transition-transform duration-200 hover:scale-[1.01] hover:shadow-md leaderboard-row text-text-secondary dark:text-text-primary" data-category="generalknowledge">
+                <div class="flex justify-center items-center rank">6</div>
+                <div class="user-info"><div class="username">SmartSparrow</div></div>
+                <div class="score">7840</div>
+              </div>
+
+              <div class="grid grid-cols-[80px_1fr_120px] px-4 py-3 border-b border-border-light dark:border-border-dark items-center bg-surface-light dark:bg-surface-dark transition-transform duration-200 hover:scale-[1.01] hover:shadow-md leaderboard-row text-text-secondary dark:text-text-primary" data-category="science">
+                <div class="flex justify-center items-center rank">7</div>
+                <div class="user-info"><div class="username">CuriousCat</div></div>
+                <div class="score">7520</div>
+              </div>
+
+              <div class="grid grid-cols-[80px_1fr_120px] px-4 py-3 border-b border-border-light dark:border-border-dark items-center bg-surface-light dark:bg-surface-dark transition-transform duration-200 hover:scale-[1.01] hover:shadow-md leaderboard-row text-text-secondary dark:text-text-primary" data-category="history">
+                <div class="flex justify-center items-center rank">8</div>
+                <div class="user-info"><div class="username">ProfessorPuzzle</div></div>
+                <div class="score">7210</div>
+              </div>
+
+              <div class="grid grid-cols-[80px_1fr_120px] px-4 py-3 border-b border-border-light dark:border-border-dark items-center bg-surface-light dark:bg-surface-dark transition-transform duration-200 hover:scale-[1.01] hover:shadow-md leaderboard-row text-text-secondary dark:text-text-primary" data-category="generalknowledge">
+                <div class="flex justify-center items-center rank">9</div>
+                <div class="user-info"><div class="username">MindMaven</div></div>
+                <div class="score">6930</div>
+              </div>
+
+              <div class="grid grid-cols-[80px_1fr_120px] px-4 py-3 border-b border-border-light dark:border-border-dark items-center bg-surface-light dark:bg-surface-dark transition-transform duration-200 hover:scale-[1.01] hover:shadow-md leaderboard-row text-text-secondary dark:text-text-primary" data-category="science">
+                <div class="flex justify-center items-center rank">10</div>
+                <div class="user-info"><div class="username">GeniusGazelle</div></div>
+                <div class="score">6650</div>
+              </div>
+
+              <div class="grid grid-cols-[80px_1fr_120px] px-4 py-3 border-b border-border-light dark:border-border-dark items-center bg-surface-light dark:bg-surface-dark transition-transform duration-200 hover:scale-[1.01] hover:shadow-md leaderboard-row text-text-secondary dark:text-text-primary" data-category="coding">
+                <div class="flex justify-center items-center rank">11</div>
+                <div class="user-info"><div class="username">CodeMaster</div></div>
+                <div class="score">6400</div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Pagination -->
+          <div class="text-center mt-5">
+            <button class="bg-primary text-text-secondary px-4 py-2 mx-1 rounded border border-transparent cursor-pointer transition-colors duration-300 pagination-btn active">1</button>
+            <button class="bg-muted-light dark:bg-surface-dark text-text-secondary dark:text-text-primary px-4 py-2 mx-1 rounded border border-border-light dark:border-border-dark cursor-pointer transition-colors duration-300 pagination-btn hover:bg-primary hover:text-text-secondary">2</button>
+            <button class="bg-muted-light dark:bg-surface-dark text-text-secondary dark:text-text-primary px-4 py-2 mx-1 rounded border border-border-light dark:border-border-dark cursor-pointer transition-colors duration-300 pagination-btn hover:bg-primary hover:text-text-secondary">3</button>
+            <button class="bg-muted-light dark:bg-surface-dark text-text-secondary dark:text-text-primary px-4 py-2 mx-1 rounded border border-border-light dark:border-border-dark cursor-pointer transition-colors duration-300 pagination-btn hover:bg-primary hover:text-text-secondary">4</button>
+            <button class="bg-muted-light dark:bg-surface-dark text-text-secondary dark:text-text-primary px-4 py-2 mx-1 rounded border border-border-light dark:border-border-dark cursor-pointer transition-colors duration-300 pagination-btn hover:bg-primary hover:text-text-secondary">5</button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="celebration" id="celebration"></div>
+  </section>
+
+  <!-- Your scripts -->
+  <script src="leader_animation.js"></script>
+  <script src="leader.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/animejs/3.2.1/anime.min.js"></script>
+</body>
+</html>

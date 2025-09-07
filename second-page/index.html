@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://db.onlinewebfonts.com/c/554de251fec51511723effebd5d0ed84?family=Roslindale+Display+Condensed+Medium" rel="stylesheet">
+    <script>
+  tailwind.config = {
+    theme: {
+      extend: {
+        fontFamily: {
+          roslindale: ['"Roslindale Display Condensed Medium"', 'serif'],
+        }
+      }
+    }
+  }
+</script>
+
+</head>
+<body class="h-full w-full bg-[#c5c0b2] dark:bg-black font-roslindale overflow-x-hidden">
+
+    <div class="container1 w-full">
+  <nav class="fixed w-full h-[100px] p-10 flex justify-between font-roslindale font-medium text-3xl leading-[100px] text-transform: uppercase dark:text-white z-10">
+       <div class="site-logo"><a href="../first-page/index.html">Nexora</a></div>
+      <div class="site-menu flex gap-12 ">
+        <div class="menu-item ml-7"><a href="../second-page/index.html">Quiz</a></div>
+        <div class="menu-item ml-7"><a href="../leaderboard/leader1.html">Leaderboard</a></div>
+        <div class="menu-item ml-7"><a href="">Contact</a></div>
+        <div class="menu-item ml-7"><a href="">About</a></div>
+        <div class="menu-item text-black dark:text-white ml-7 mb-1 "><a href=""> <i class="fa-solid fa-user"></i></a></div>
+      </div>
+    </nav>  
+
+  <section class="wrapper-404 relative w-[400vw] h-[100vh] will-change-transform">
+    <h1 class=" text w-full text-[43.8vw] font-normal text-center m-0  [text-shadow:1px_1px_6px_rgba(0,0,0,0.25)] dark:text-white  dark:[text-shadow:_0_0_25px_white]  mb-1">Choose a challenge!</h1>
+
+    <div class="card absolute w-[350px] h-[350px]   shadow-[0_6px_12px_rgba(0,0,0,0.2)]   dark:shadow-[0_0_20px_5px_white] rounded-3xl overflow-hidden top-[50%] left-[20%]" id="card1">
+      <a href="../quiz-page/coding-quiz.html"><img class="w-full h-full object-cover" src="coding_card.png" alt=""></a>
+    </div>
+
+    <div class="card absolute w-[350px] h-[350px]   shadow-[0_6px_12px_rgba(0,0,0,0.2)]   dark:shadow-[0_0_20px_5px_white] rounded-3xl overflow-hidden top-[25%] left-[40%]" id="card2">
+      <a href="../quiz-page/general-quiz.html"><img class="w-full h-full object-cover" src="gk_card2.png" alt=""></a>
+    </div>
+
+    <div class="card absolute w-[350px] h-[350px]   shadow-[0_6px_12px_rgba(0,0,0,0.2)]  dark:shadow-[0_0_20px_5px_white] rounded-3xl overflow-hidden top-[45%] left-[60%]" id="card3">
+      <a href="../quiz-page/science-quiz.html"><img class="w-full h-full object-cover" src="science_card.png" alt=""></a>
+    </div>
+
+    <div class="card absolute w-[350px] h-[320px]   shadow-[0_6px_12px_rgba(0,0,0,0.2)]  dark:shadow-[0_0_20px_5px_white] rounded-3xl overflow-hidden top-[15%] left-[80%]" id="card4">
+      <a href="../quiz-page/computer-quiz.html"><img class="w-full h-full object-cover" src="history_card.png" alt=""></a>
+    </div>
+  </section>
+
+  <section class="outro relative w-full h-[100vh] text-black bg-[#c5c0b2] dark:text-white dark:bg-black">
+   <div class="box flex flex-col items-center gap-4">
+    <h1 class="absolute top-1/6 left-1/2 transform -translate-x-1/2 -translate-y-1/2 w-max text-5xl font-light text-center" id="txt">
+      Test your typing skills now!!! 
+    </h1>
+    <button id="btn" class="mt-20  color-black text-[#c5c0b2] bg-black relative rounded-2xl px-8 py-4 text-4xl cursor-pointer  dark:text-black dark:bg-white active:bg-opacity-95" onclick="window.location.href='../typing/index.html'">Start</button>
+  </div>
+  </section>
+</div>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/ScrollTrigger.min.js"></script>
+    <script src="script.js"></script>
+    <script src="typing.js"></script>
+    <script src="../second-page/nav_animation.js"></script>
+</body>
+</html>

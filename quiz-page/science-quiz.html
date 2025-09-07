@@ -1,0 +1,767 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Science Quiz</title>
+    <link href="https://fonts.googleapis.com/css2?family=Be+Vietnam+Pro:wght@300;400;500;600;700&display=swap"
+        rel="stylesheet">
+    <link
+        href="https://db.onlinewebfonts.com/c/554de251fec51511723effebd5d0ed84?family=Roslindale+Display+Condensed+Medium"
+        rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js"></script>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    fontFamily: {
+                        'vietnam': ['Be Vietnam Pro', 'sans-serif'],
+                        'roslindale': ['Roslindale Display Condensed Medium', 'serif']
+                    },
+                    spacing: {
+                        '15': '3.75rem',
+                        '7.5': '1.875rem',
+                        '6.5': '1.625rem',
+                        '12.5': '3.125rem',
+                        '25': '6.25rem'
+                    }
+                }
+            },
+            darkMode: 'class'
+        }
+    </script>
+    <style>
+        :root {
+            --bg-primary: #c5c0b2;
+            --bg-secondary: #ffffff;
+            --text-primary: #000000;
+            --text-secondary: #333333;
+            --accent-color: #8a8170;
+            --card-bg: rgba(255, 255, 255, 0.9);
+            --card-border: rgba(138, 129, 112, 0.3);
+            --card-hover: rgba(138, 129, 112, 0.15);
+            --nav-bg: rgba(197, 192, 178, 0.95);
+        }
+
+        .dark {
+            --bg-primary: #000000;
+            --bg-secondary: #0a0a0a;
+            --text-primary: #ffffff;
+            --text-secondary: #e5e5e5;
+            --accent-color: #c5c0b2;
+            --card-bg: rgba(197, 192, 178, 0.1);
+            --card-border: rgba(197, 192, 178, 0.3);
+            --card-hover: rgba(197, 192, 178, 0.2);
+            --nav-bg: rgba(0, 0, 0, 0.95);
+        }
+
+        @media (prefers-color-scheme: dark) {
+            :root {
+                --bg-primary: #000000;
+                --bg-secondary: #0a0a0a;
+                --text-primary: #ffffff;
+                --text-secondary: #e5e5e5;
+                --accent-color: #c5c0b2;
+                --card-bg: rgba(197, 192, 178, 0.1);
+                --card-border: rgba(197, 192, 178, 0.3);
+                --card-hover: rgba(197, 192, 178, 0.2);
+                --nav-bg: rgba(0, 0, 0, 0.95);
+            }
+        }
+
+        * {
+            box-sizing: border-box;
+
+            -webkit-font-smoothing: antialiased;
+            -moz-osx-font-smoothing: grayscale;
+            transition: background-color 0.3s ease, color 0.3s ease, border-color 0.3s ease;
+        }
+
+        button {
+            font-family: "Be Vietnam Pro", sans-serif;
+        }
+
+        body {
+            padding: 0;
+            background: var(--bg-primary);
+            font-family: "Be Vietnam Pro", sans-serif;
+            width: 100%;
+            height: 100vh;
+            overflow: hidden;
+            display: flex;
+            margin: 0;
+            color: var(--text-primary);
+        }
+
+        @media (max-width: 980px),
+        (max-height: 580px) {
+            body {
+                padding: 60px 20px;
+            }
+        }
+
+        #app {
+            width: 100%;
+            height: 100%;
+            display: flex;
+            align-items: center;
+            flex-wrap: wrap;
+            justify-content: center;
+        }
+
+        .game-started:after {
+            transform: translateX(calc(-50% - 100px));
+        }
+
+        @media (max-width: 980px),
+        (max-height: 580px) {
+            .game-started:after {
+                transform: scale(1.2);
+            }
+        }
+
+        .game {
+            position: relative;
+            max-width: 1200px;
+            width: 100%;
+            height: 70vh;
+            min-height: max-content;
+            margin: 15vh auto;
+            box-shadow: 0 0 80px rgba(0, 0, 0, 0.5);
+            border-radius: 12px;
+            overflow: hidden;
+            scroll-behavior: smooth;
+            display: flex;
+            transition: 0.3s;
+        }
+
+        @media (max-width: 980px),
+        (max-height: 580px) {
+            .game {
+                margin: auto;
+                height: auto;
+                overflow: auto;
+                max-height: 100%;
+            }
+        }
+
+        .game[data-game-started] .intro {
+            width: calc(50% - 100px);
+            transition: 0.3s;
+        }
+
+        @media (max-width: 980px),
+        (max-height: 580px) {
+            .game[data-game-started] .intro {
+                width: 100%;
+                height: auto;
+            }
+        }
+
+        .game[data-game-started] .intro-inner {
+            padding: 20px;
+        }
+
+        @media (max-width: 980px),
+        (max-height: 580px) {
+            .game[data-game-started] .intro-inner {
+                padding: 40px 20px;
+            }
+        }
+
+        .game[data-game-started] .game-area {
+            flex-shrink: 0;
+            width: calc(50% + 100px);
+            display: flex;
+            align-items: center;
+            flex-wrap: wrap;
+            transition: 0.3s;
+            flex-grow: 1;
+        }
+
+        @media (max-width: 980px),
+        (max-height: 580px) {
+            .game[data-game-started] .game-area {
+                width: 100%;
+                padding: 20px;
+            }
+        }
+
+        .game-area {
+            background-color: var(--bg-secondary);
+            overflow: auto;
+            padding: 40px;
+        }
+
+        @media (max-width: 980px),
+        (max-height: 580px) {
+            .game-area {
+                padding: 0;
+            }
+        }
+
+        .intro {
+            background: var(--bg-secondary);
+            height: 100%;
+            width: 100%;
+            flex-shrink: 0;
+            color: var(--text-primary);
+            background-position: center;
+            position: relative;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border: 1px solid var(--card-border);
+        }
+
+        .intro-inner {
+            text-align: center;
+            padding: 30px 60px;
+            width: 100%;
+        }
+
+        .intro-title {
+            margin: 0;
+            font-size: 42px;
+            text-shadow: 1px 2px 0 rgba(0, 0, 0, 0.35);
+            font-family: "Roslindale Display Condensed Medium", serif;
+        }
+
+        .intro-desc {
+            opacity: 0.8;
+            font-weight: 300;
+            color: var(--text-secondary);
+        }
+
+        .back-button {
+            position: absolute;
+            top: 20px;
+            left: 20px;
+            background-color: rgba(138, 129, 112, 0.2);
+            border: 1px solid var(--card-border);
+            color: var(--text-primary);
+            padding: 10px 20px;
+            border-radius: 6px;
+            cursor: pointer;
+            font-size: 14px;
+            transition: all 0.3s ease;
+        }
+
+        .back-button:hover {
+            background-color: rgba(138, 129, 112, 0.3);
+            transform: translateY(-2px) scale(1.05);
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+        }
+
+        .intro-button {
+            background-color: var(--accent-color);
+            border: 0;
+            padding: 12px 26px;
+            color: var(--text-primary);
+            border-radius: 4px;
+            font-size: 18px;
+            transform: translateY(20px);
+            cursor: pointer;
+            font-weight: 500;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
+        }
+
+        .intro-button:disabled {
+            opacity: 0.6;
+            cursor: not-allowed;
+        }
+
+        .loading-message {
+            color: var(--accent-color);
+            font-weight: 500;
+            margin-top: 10px;
+        }
+
+        .indicator {
+            display: flex;
+            justify-content: center;
+            position: relative;
+            max-width: 80%;
+            margin: 20px auto 0;
+        }
+
+        .indicator-item {
+            width: 12px;
+            height: 4px;
+            border-radius: 6px;
+            background-color: var(--text-secondary);
+        }
+
+        .indicator-item+.indicator-item {
+            margin-left: 8px;
+        }
+
+        .indicator-item:last-child:before {
+            background: var(--text-primary);
+            content: "";
+            width: 12px;
+            height: 4px;
+            position: absolute;
+            border-radius: 6px;
+            left: 0;
+            top: 0;
+            opacity: 0;
+        }
+
+        .indicator-item:last-child:after {
+            content: "COMPLETED";
+            position: absolute;
+            width: 100%;
+            left: 0;
+            font-size: 14px;
+            letter-spacing: 1px;
+            font-weight: 600;
+            top: 0;
+            opacity: 0;
+            color: var(--text-primary);
+        }
+
+        .indicator-item:last-child.completed:before {
+            animation: indicator 1s both;
+        }
+
+        .indicator-item:last-child.completed:after {
+            animation: indicator-completed 0.4s 0.8s both;
+        }
+
+        @keyframes indicator {
+
+            0%,
+            100% {
+                opacity: 1;
+            }
+
+            50% {
+                height: 6px;
+            }
+
+            100% {
+                height: 40px;
+                top: -2px;
+                left: -2px;
+                background-color: var(--accent-color);
+            }
+
+            80% {
+                background-color: var(--text-primary);
+            }
+
+            50%,
+            100% {
+                width: calc(100% + 1px);
+            }
+        }
+
+        @keyframes indicator-completed {
+
+            70%,
+            100% {
+                opacity: 1;
+            }
+
+            100% {
+                transform: translatey(10px);
+            }
+        }
+
+        .question {
+            display: flex;
+            height: 100%;
+            flex-direction: column;
+            width: 100%;
+        }
+
+        .question-inner {
+            margin: auto 0;
+            width: 100%;
+        }
+
+        .question-answers {
+            padding: 0;
+            list-style: none;
+        }
+
+        .question li,
+        .question-text {
+            opacity: 0;
+        }
+
+        .question-button {
+            background-color: var(--accent-color);
+            border: 0;
+            padding: 14px 26px;
+            color: var(--text-primary);
+            border-radius: 4px;
+            margin-top: 20px;
+            font-size: 16px;
+            cursor: pointer;
+            font-weight: 500;
+        }
+
+        .question-text {
+            color: var(--text-primary);
+            margin: 20px 0;
+        }
+
+        .question input {
+            display: none;
+        }
+
+        .question label {
+            display: flex;
+            padding: 12px 24px 12px 16px;
+            font-size: 15px;
+            border-radius: 4px;
+            overflow: hidden;
+            align-items: center;
+            border: 2px solid var(--card-border);
+            color: var(--text-primary);
+            cursor: pointer;
+            position: relative;
+            background-color: var(--card-bg);
+        }
+
+        .question label:before {
+            height: 16px;
+            background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' width='24' height='24' stroke='%232c2c2c' stroke-width='3' fill='none' stroke-linecap='round' stroke-linejoin='round' class='css-i6dzq1'%3E%3Cpolyline points='20 6 9 17 4 12'%3E%3C/polyline%3E%3C/svg%3E");
+            content: "";
+            background-size: cover;
+            opacity: 0.5;
+            transition: 0.3s;
+            flex-shrink: 0;
+            position: absolute;
+            right: -16px;
+            top: 50%;
+            transform: translatey(-50%);
+            width: 16px;
+        }
+
+        .question li+li {
+            margin-top: 10px;
+        }
+
+        .question input:checked+label {
+            background-color: var(--card-hover);
+            border-color: var(--accent-color);
+        }
+
+        .question input:checked+label:before {
+            transform: translatex(-24px) translatey(-50%);
+        }
+
+        .is-true label {
+            background-color: rgba(138, 129, 112, 0.2);
+            border-color: var(--accent-color);
+        }
+
+        .is-true label:before {
+            background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' width='24' height='24' stroke='%238a8170' stroke-width='3' fill='none' stroke-linecap='round' stroke-linejoin='round' class='css-i6dzq1'%3E%3Cpolyline points='20 6 9 17 4 12'%3E%3C/polyline%3E%3C/svg%3E");
+            opacity: 1;
+            transform: translatex(-24px) translatey(-50%);
+        }
+
+        .correction {
+            width: 100%;
+        }
+
+        .correction [data-selected="true"].is-true label {
+            border-color: #4a7c59;
+            background-color: #d4edda;
+        }
+
+        .correction [data-selected="true"].is-true label:before {
+            background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' width='24' height='24' stroke='%234a7c59' stroke-width='3' fill='none' stroke-linecap='round' stroke-linejoin='round' class='css-i6dzq1'%3E%3Cpolyline points='20 6 9 17 4 12'%3E%3C/polyline%3E%3C/svg%3E");
+            opacity: 1;
+            transform: translatex(-24px) translatey(-50%);
+        }
+
+        .correction [data-selected="true"]:not(.is-true) label {
+            background-color: #ffd5dc;
+            border: 2px solid #ff6161;
+        }
+
+        .correction [data-selected="true"]:not(.is-true) label:before {
+            opacity: 1;
+            background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' width='24' height='24' stroke='%23ff6161' stroke-width='3' fill='none' stroke-linecap='round' stroke-linejoin='round' class='css-i6dzq1'%3E%3Cline x1='18' y1='6' x2='6' y2='18'%3E%3C/line%3E%3Cline x1='6' y1='6' x2='18' y2='18'%3E%3C/line%3E%3C/svg%3E");
+        }
+
+        .correction input {
+            pointer-events: none;
+        }
+
+        .result {
+            transition: 0.3s;
+            display: flex;
+            flex-direction: column;
+            width: 100%;
+            max-width: 80%;
+            margin: auto;
+            height: 0;
+            overflow: hidden;
+        }
+
+        .result-item {
+            display: inline-flex;
+            flex-direction: row-reverse;
+            justify-content: space-between;
+            width: 100%;
+            padding: 5px 10px;
+        }
+
+        .result-item+.result-item {
+            border-top: 1px solid rgba(138, 129, 112, 0.2);
+        }
+
+        .result-count {
+            font-size: 32px;
+            font-weight: 600;
+        }
+
+        .result-text {
+            font-size: 12px;
+            letter-spacing: 2px;
+            opacity: 0.8;
+            display: flex;
+            font-weight: 500;
+            align-items: center;
+            line-height: 1;
+        }
+
+        .result-text svg {
+            margin-right: 8px;
+            position: relative;
+            top: -1px;
+            width: 16px;
+            height: 16px;
+        }
+
+        .result-item.is-correct {
+            color: #42ff73;
+        }
+
+        .result-item.is-wrong {
+            color: #ffa2a2;
+        }
+
+        [data-game-finished] .result {
+            opacity: 1;
+            margin-top: 40px;
+            padding-top: 20px;
+            display: flex;
+            animation: result 0.6s 0.5s both;
+        }
+
+        [data-game-finished] .result-item {
+            animation: result-item 0.6s 1.3s both;
+        }
+
+        [data-game-finished] .result-item.is-correct {
+            animation-delay: 1s;
+        }
+
+        [data-game-finished] .result-item.is-wrong {
+            animation-delay: 1.15s;
+        }
+
+        [data-game-finished] .restart-button {
+            display: block;
+        }
+
+        .correction .question+.question {
+            margin-top: 30px;
+        }
+
+        @keyframes result {
+            0% {
+                height: 0;
+            }
+
+            100% {
+                height: 150px;
+            }
+        }
+
+        @keyframes result-item {
+            0% {
+                opacity: 0;
+                transform: translateY(10px);
+            }
+        }
+
+        .restart-button {
+            height: 40px;
+            border: 1px solid var(--card-border);
+            margin: 30px auto 0;
+            background-color: transparent;
+            color: var(--text-primary);
+            border-radius: 4px;
+            padding: 0 16px;
+            font-weight: 500;
+            transition: 0.3s;
+            cursor: pointer;
+            display: none;
+            animation: result-item 0.4s 1.45s both;
+        }
+
+        .restart-button:hover {
+            background-color: rgba(138, 129, 112, 0.1);
+        }
+
+        .hidden {
+            display: none;
+        }
+
+        /* Navbar styling */
+        nav {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100px;
+            padding: 0 40px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            font-family: "Roslindale Display Condensed Medium", serif;
+            font-size: 24px;
+            text-transform: uppercase;
+            z-index: 1000;
+            background-color: var(--nav-bg);
+            backdrop-filter: blur(10px);
+        }
+
+        .site-logo {
+            font-family: "Roslindale Display Condensed Medium", serif;
+            color: var(--text-primary);
+        }
+
+        .site-menu {
+            display: flex;
+        }
+
+        .menu-item {
+            margin-left: 28px;
+        }
+
+        .menu-item a {
+            color: var(--text-primary);
+            text-decoration: none;
+            transition: opacity 0.3s;
+        }
+
+        .menu-item a:hover {
+            opacity: 0.7;
+        }
+
+        .menu-item:last-child {
+            margin-bottom: 1px;
+        }
+
+        /* Theme toggle button */
+        .theme-toggle {
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+            background: var(--accent-color);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            z-index: 1000;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+        }
+
+        .theme-toggle i {
+            color: var(--text-primary);
+            font-size: 20px;
+        }
+    </style>
+</head>
+
+<body>
+    <!-- Navbar -->
+        <nav
+        class="fixed w-full h-[100px] p-10 flex justify-between font-roslindale font-medium text-3xl leading-[100px] mb-20 text-transform: uppercase dark:text-white z-10">
+        <div class="site-logo"><a href="../first-page/index.html">Nexora</a></div>
+        <div class="site-menu flex ">
+          <div class="menu-item ml-7 "><a href="../second-page/index.html">Quiz</a></div>
+          <div class="menu-item ml-7"><a href="../leaderboard/leader1.html">Leaderboard</a></div>
+          <div class="menu-item ml-7"><a href="">Contact</a></div>
+          <div class="menu-item ml-7"><a href="">About</a></div>
+          <div class="menu-item text-black dark:text-white ml-7 mb-1 "><a href=""> <i class="fa-solid fa-user"></i></a>
+          </div>
+        </div>
+      </nav>
+
+    <div id="app">
+        <div class="game" id="game">
+            <div class="intro">
+                <button class="back-button" onclick="window.location.href='../second-page/index.html'">← Back to Subjects</button>
+                <div class="intro-inner">
+                    <h1 class="intro-title">Science Quiz</h1>
+                    <div id="intro-content">
+                        <p class="intro-desc">The test contains 10 questions and there is no time limit.</p>
+                        <button class="intro-button" id="startBtn" onclick="startQuiz()">Start Quiz</button>
+                        <div id="loading-message" class="loading-message hidden">Loading questions...</div>
+                    </div>
+                    <div id="indicator" class="indicator hidden"></div>
+                    <div class="result" id="result">
+                        <div class="result-item is-correct">
+                            <span class="result-count" id="correct-count">0</span>
+                            <span class="result-text">
+                                <svg width="16" height="16" fill="none" stroke="currentColor" stroke-linecap="round"
+                                    stroke-linejoin="round" stroke-width="2" viewBox="0 0 24 24">
+                                    <path d="M22 11.08V12a10 10 0 11-5.93-9.14"></path>
+                                    <path d="M22 4L12 14.01 9 11.01"></path>
+                                </svg>
+                                CORRECT
+                            </span>
+                        </div>
+                        <div class="result-item is-wrong">
+                            <span class="result-count" id="wrong-count">0</span>
+                            <span class="result-text">
+                                <svg width="16" height="16" fill="none" stroke="currentColor" stroke-linecap="round"
+                                    stroke-linejoin="round" stroke-width="2" viewBox="0 0 24 24">
+                                    <circle cx="12" cy="12" r="10"></circle>
+                                    <path d="M15 9L9 15"></path>
+                                    <path d="M9 9L15 15"></path>
+                                </svg>
+                                WRONG
+                            </span>
+                        </div>
+                        <div class="result-item is-empty">
+                            <span class="result-count" id="empty-count">0</span>
+                            <span class="result-text">
+                                <svg width="16" height="16" fill="none" stroke="currentColor" stroke-linecap="round"
+                                    stroke-linejoin="round" stroke-width="2" viewBox="0 0 24 24">
+                                    <circle cx="12" cy="12" r="10"></circle>
+                                    <path d="M8 12L16 12"></path>
+                                </svg>
+                                EMPTY
+                            </span>
+                        </div>
+                    </div>
+                    <button class="restart-button" onclick="restartQuiz()">Restart Quiz</button>
+                </div>
+            </div>
+            <div class="game-area" id="game-area"></div>
+        </div>
+    </div>
+
+
+    <script src="science-quiz.js"></script>
+       <script src="coding_animation.js"></script>
+</body>
+
+</html>

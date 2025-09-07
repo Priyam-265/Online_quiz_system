@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>3D Scroll Cards — GSAP + ScrollTrigger</title>
+
+  <!-- Tailwind CDN -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          fontFamily: { display: ['Inter', 'ui-sans-serif', 'system-ui'] },
+          boxShadow: {
+            soft: '0 10px 30px rgba(0,0,0,0.15)',
+            glow: '0 20px 60px rgba(99,102,241,0.35)'
+          }
+        }
+      }
+    }
+  </script>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;800&display=swap" rel="stylesheet">
+<script type="module" src="https://unpkg.com/@google/model-viewer/dist/model-viewer.min.js"></script>
+
+  <!-- GSAP + ScrollTrigger -->
+  <script defer src="https://unpkg.com/gsap@3/dist/gsap.min.js"></script>
+  <script defer src="https://unpkg.com/gsap@3/dist/ScrollTrigger.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/ScrollSmoother.min.js"></script>
+  <style>
+    /* Perspective for 3D */
+    .perspective-1200 { perspective: 1200px; }
+    .preserve-3d { transform-style: preserve-3d; }
+    .card-3d::before {
+      /* subtle sheen */
+      content: "";
+      position: absolute; inset: 0;
+      background: radial-gradient(1200px 600px at var(--mx,50%) -20%, rgba(255,255,255,0.25), transparent 60%);
+      opacity: 0; pointer-events: none; transition: opacity .3s ease;
+      border-radius: inherit;
+      transform: translateZ(1px);
+    }
+    .card-3d:hover::before { opacity: 1; }
+
+    /* Smoothpin helper (prevents layout jumps) */
+    .pin-spacer { will-change: transform; }
+  </style>
+</head>
+<body class="box-border">
+
+  <div id="smooth-wrapper">
+  <div id="smooth-content">
+    <div class="content-wrapper h-[100vh] bg-white ">
+      Content
+               <model-viewer src="explore_idle.glb" 
+                  autoplay 
+                  animation-loop
+                  camera-controls 
+                  auto-rotate
+      
+                  shadow-intensity="1" class="h-full w-full">
+                      </model-viewer>
+    </div>
+      <div class="extra-space h-[40vh] bg-transparent pointer-events-none">
+        </div>
+  </div>
+</div>
+  <footer class="bg-black h-[40vh] -z-10 text-white fixed bottom-0 left-0 w-full">
+    Footer
+  </footer>
+<script>
+  gsap.registerPlugin(ScrollTrigger, ScrollSmoother,);
+
+
+
+ScrollSmoother.create({
+  smooth: 1,               
+  effects: true,          
+  smoothTouch: 0.1,        
+});
+  let footerTrigger = ScrollTrigger.create({
+  trigger: ".content-wrapper",
+  start: "bottom 90%", 
+  pin: "footer", 
+  pinSpacing: false, 
+  scrub: true,     
+  markers: true,  
+});
+
+if (footerTrigger &&!footerTrigger.isActive) {
+  footerTrigger.refresh();
+}
+</script>
+  
+</body>
+</html>

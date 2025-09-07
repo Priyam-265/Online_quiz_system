@@ -1,0 +1,128 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Nexora</title>
+<script src="https://cdn.tailwindcss.com"></script>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+      <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js"></script>
+<link href="https://db.onlinewebfonts.com/c/554de251fec51511723effebd5d0ed84?family=Roslindale+Display+Condensed+Medium" rel="stylesheet">
+<script>
+tailwind.config = {
+  theme: {
+    extend: {
+      fontFamily: {
+        roslindale: ['"Roslindale Display Condensed Medium"', 'serif'],
+      },
+      colors: {
+        primary: '#000000',
+        secondary: '#646669',
+        darkBg: '#000000',
+        lightBg: '#c5c0b2',
+        lightText: '#000000',
+        darkText: '#ffffff',
+        errorRed: '#ca4754'
+      }
+    }
+  }
+}
+</script>
+</head>
+<body class="h-screen w-screen bg-lightBg text-lightText overflow-hidden dark:bg-darkBg dark:text-darkText">
+
+  <nav class="fixed w-full h-[100px] p-3 flex justify-between font-roslindale font-medium text-3xl leading-[100px] text-transform: uppercase dark:text-white z-10">
+       <div class="site-logo"><a href="../first-page/index.html">Nexora</a></div>
+      <div class="site-menu flex gap-12 ">
+        <div class="menu-item ml-7"><a href="../second-page/index.html">Quiz</a></div>
+        <div class="menu-item ml-7"><a href="../leaderboard/leader1.html">Leaderboard</a></div>
+        <div class="menu-item ml-7"><a href="">Contact</a></div>
+        <div class="menu-item ml-7"><a href="">About</a></div>
+        <div class="menu-item text-black dark:text-white ml-7 mb-1 "><a href=""> <i class="fa-solid fa-user"></i></a></div>
+      </div>
+    </nav>  
+
+<section class="items">
+<div class=" flex flex-col h-screen">
+
+  <div class="flex flex-wrap justify-center items-center gap-5 p-10 border-b border-secondary bg-lightBg dark:bg-darkBg relative top-10 z-100">
+    <div class="flex gap-2 items-center">
+      <button class="level-btn active border-2 border-secondary text-secondary font-bold px-4 py-2 rounded-lg hover:text-lightText hover:border-lightText dark:hover:text-darkText dark:hover:border-darkText" data-level="easy">Easy</button>
+      <button class="level-btn border-2 border-secondary text-secondary font-bold px-4 py-2 rounded-lg hover:text-lightText hover:border-lightText dark:hover:text-darkText dark:hover:border-darkText" data-level="hard">Hard</button>
+    </div>
+    <div class="flex gap-2 items-center">
+      <button class="config-btn border-none text-secondary px-3 py-2 rounded-lg hover:text-lightText dark:hover:text-darkText dark:active:text-white" data-type="punctuation">punctuation</button>
+      <button class="config-btn border-none text-secondary px-3 py-2 rounded-lg hover:text-lightText dark:hover:text-darkText  dark:active:text-white" data-type="numbers">numbers</button>
+    </div>
+    <div class="flex gap-2 items-center">
+      <button class="config-btn active border-none text-secondary px-3 py-1 rounded-lg hover:text-lightText dark:hover:text-darkText active:opacity-95" data-mode="time" data-value="15">15</button>
+      <button class="config-btn border-none text-secondary px-3 py-1 rounded-lg hover:text-lightText dark:hover:text-darkText active:opacity-95" data-mode="time" data-value="30">30</button>
+      <button class="config-btn border-none text-secondary px-3 py-1 rounded-lg hover:text-lightText dark:hover:text-darkText active:opacity-95" data-mode="time" data-value="60">60</button>
+      <button class="config-btn border-none text-secondary px-3 py-1 rounded-lg hover:text-lightText dark:hover:text-darkText active:opacity-95" data-mode="time" data-value="120">120</button>
+    </div>
+  </div>
+
+  <!-- Test Container -->
+  <div class="relative flex-1 flex flex-col justify-center items-center p-5">
+    <div class="absolute left-5 top-1/2 transform -translate-y-1/2 text-4xl font-bold text-lightText dark:text-darkText z-10" id="timer">00:00</div>
+
+    <div class="flex justify-center gap-10 mb-5 hidden" id="stats">
+      <div class="text-center">
+        <div class="text-2xl text-primary font-bold" id="wpm">0</div>
+        <div class="text-secondary text-sm mt-1">wpm</div>
+      </div>
+      <div class="text-center">
+        <div class="text-2xl text-primary font-bold" id="accuracy">100%</div>
+        <div class="text-secondary text-sm mt-1">acc</div>
+      </div>
+      <div class="text-center">
+        <div class="text-2xl text-primary font-bold" id="time">15</div>
+        <div class="text-secondary text-sm mt-1">time</div>
+      </div>
+    </div>
+
+    <div class="relative max-w-4xl w-full h-64 p-10 rounded-xl border border-secondary bg-lightBg dark:bg-darkBg shadow-lg overflow-hidden text-3xl md:text-4xl" id="test-words">
+      <div class="relative" id="text-content">
+        <div class="absolute w-0.5 h-8 bg-primary animate-blink" id="caret"></div>
+      </div>
+    </div>
+
+    <button class="hidden bg-primary text-lightText dark:text-darkText font-bold px-6 py-3 rounded-lg mt-5" id="end-restart-btn" onclick="restartTest()">restart test</button>
+    <input type="text" id="input-field" class="absolute left-[-9999px] opacity-0" autocomplete="off">
+  </div>
+
+  <!-- Control Buttons -->
+  <div class="flex justify-center gap-5 p-5 bg-lightBg dark:bg-darkBg border-t border-secondary">
+    <button class="header-control-btn border-2 border-secondary text-secondary font-bold px-4 py-2 rounded-lg hover:text-lightText hover:border-lightText disabled:opacity-50 disabled:cursor-not-allowed dark:hover:text-darkText dark:hover:border-darkText" id="pause-btn" onclick="togglePause()" disabled>pause</button>
+    <button class="header-control-btn border-2 border-secondary text-secondary font-bold px-4 py-2 rounded-lg hover:text-lightText hover:border-lightText dark:hover:text-darkText dark:hover:border-darkText" id="restart-btn" onclick="restartTest()">restart</button>
+  </div>
+
+  <!-- Results -->
+  <div class="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 w-full max-w-xl p-10 rounded-xl border border-secondary bg-lightBg dark:bg-darkBg shadow-lg hidden" id="results">
+    <h2 class="text-2xl font-bold text-black mb-5 text-center">Test Complete</h2>
+    <div class="grid grid-cols-2 gap-8 mb-5">
+      <div class="text-center">
+        <div class="text-3xl font-bold text-black dark:text-white"  id="final-wpm">0</div>
+        <div class="text-secondary mt-2">wpm</div>
+      </div>
+      <div class="text-center">
+        <div class="text-3xl font-bold text-black dark:text-white" id="final-accuracy">100%</div>
+        <div class="text-secondary mt-2">accuracy</div>
+      </div>
+      <div class="text-center">
+        <div class="text-3xl font-bold text-black dark:text-white" id="final-characters">0</div>
+        <div class="text-secondary mt-2">characters</div>
+      </div>
+      <div class="text-center">
+        <div class="text-3xl font-bold text-black dark:text-white" id="final-time">15s</div>
+        <div class="text-secondary mt-2">time</div>
+      </div>
+    </div>
+    <button class="bg-primary text-lightBg dark:text-black dark:bg-white font-bold px-6 py-3 rounded-lg w-full" onclick="restartTest()">try again</button>
+  </div>
+</div>
+</section>
+<script src="typing_animation.js"></script>
+<script src="script.js"></script>
+</body>
+</html>

@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Telescope Scroll Animation</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+</head>
+<body class="bg-black text-white font-sans">
+
+  <!-- Intro -->
+  <section class="h-screen flex items-center justify-center">
+    <h1 class="text-5xl font-semibold text-center">A curated series of surreal frames.</h1>
+  </section>
+
+  <!-- Spotlight -->
+  <section class="relative h-screen overflow-hidden spotlight">
+    
+    <!-- Intro words -->
+    <div class="absolute top-1/2 left-0 w-full flex -translate-y-1/2 gap-2 px-10">
+      <div class="flex-1 flex justify-end"><p class="text-xl">Beneath</p></div>
+      <div class="flex-1"><p class="text-xl">Beyond</p></div>
+    </div>
+
+    <!-- Background lens image -->
+    <div class="absolute inset-0 scale-0 spotlight-bg-img">
+      <img src="../second-page/coding_card.png" alt="" class="w-full h-full object-cover scale-150">
+    </div>
+
+    <!-- Titles -->
+    <div class="absolute inset-0 flex flex-col justify-center items-start px-20 spotlight-titles space-y-20">
+      <!-- JS injects h1 titles here -->
+    </div>
+
+    <!-- Stacked images -->
+    <div class="absolute inset-0 flex items-center justify-center spotlight-images"></div>
+
+    <!-- Header text -->
+    <div class="absolute top-1/2 left-10 -translate-y-1/2 opacity-0 spotlight-header">
+      <p class="text-2xl">Discover</p>
+    </div>
+  </section>
+
+  <!-- Outro -->
+  <section class="h-screen flex items-center justify-center">
+    <h1 class="text-5xl font-semibold text-center">Moments in still motion.</h1>
+  </section>
+
+  <script type="module" src="script.js"></script>
+</body>
+</html>
