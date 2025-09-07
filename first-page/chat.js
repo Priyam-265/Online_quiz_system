@@ -1,3 +1,5 @@
+console.log("NAT_API in window:", window.NAT_API);
+console.log("API_BASE is:", API_BASE);
 document.addEventListener("DOMContentLoaded", () => {
   gsap.registerPlugin(ScrollTrigger);
 
@@ -80,7 +82,9 @@ document.addEventListener("DOMContentLoaded", () => {
       }, 280);
     },
   });
-  const API_BASE = window.NAT_API || "http://localhost:3000";
+  // const API_BASE = window.NAT_API || "http://localhost:3000";
+  const API_BASE = window.NAT_API || "https://online-quiz-system-t7it.onrender.com";
+
 
   // 🔹 Call your backend AI server (DeepSeek free model)
   async function fetchAIResponse(message) {
