@@ -9,6 +9,27 @@ dotenv.config();
 const app = express();
 app.use(bodyParser.json());
 
+
+// const allowedOrigins = [
+//   "http://localhost:3000",
+//   "http://127.0.0.1:3000",
+//   "https://online-quiz-system-front.onrender.com",
+// ];
+
+// app.use(cors({
+//   origin: allowedOrigins,
+//   credentials: true,
+//   methods: ["GET", "POST", "OPTIONS"],
+//   allowedHeaders: ["Content-Type"],
+// }));
+
+// // ✅ Handle OPTIONS preflight for all routes
+// app.options("*", cors({
+//   origin: allowedOrigins,
+//   credentials: true,
+//   methods: ["GET", "POST", "OPTIONS"],
+//   allowedHeaders: ["Content-Type"],
+// }));
 // ✅ Full CORS setup
 const allowedOrigins = [
   "http://localhost:3000",
@@ -23,13 +44,10 @@ app.use(cors({
   allowedHeaders: ["Content-Type"],
 }));
 
-// ✅ Handle OPTIONS preflight for all routes
-app.options("*", cors({
-  origin: allowedOrigins,
-  credentials: true,
-  methods: ["GET", "POST", "OPTIONS"],
-  allowedHeaders: ["Content-Type"],
-}));
+// ✅ Handle preflight globally (fixes path-to-regexp error)
+app.options("*", (req, res) => {
+  res.sendStatus(200);
+});
 
 const client = new OpenAI({
   apiKey: process.env.OPENROUTER_API_KEY,
