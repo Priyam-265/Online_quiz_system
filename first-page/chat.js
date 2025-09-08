@@ -22,10 +22,10 @@ document.addEventListener("DOMContentLoaded", () => {
     // window.location.hostname === "127.0.0.1";
 
   // 🌍 Pick API base depending on environment
-  // const API_BASE = isLocal
-  //   ? "http://localhost:3000"
-  //   : "https://online-quiz-system-t7it.onrender.com";
-  const API_BASE = "https://online-quiz-system-t7it.onrender.com";
+  const API_BASE = isLocal
+    ? "http://localhost:3000"
+    : "https://online-quiz-system-t7it.onrender.com";
+  // const API_BASE = "https://online-quiz-system-t7it.onrender.com";
   
 
   // console.log("🌍 Running in", isLocal ? "Development" : "Production");
