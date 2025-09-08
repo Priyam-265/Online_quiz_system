@@ -17,6 +17,7 @@ app.use(
       "http://127.0.0.1:3000", // Add this line
       "https://online-quiz-system-t7it.onrender.com",
     ],
+    credentials:true,
     methods: ["GET", "POST"],
   })
 );
