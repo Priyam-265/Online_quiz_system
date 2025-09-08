@@ -9,45 +9,19 @@ dotenv.config();
 const app = express();
 app.use(bodyParser.json());
 
+// ✅ Explicit CORS setup
+app.use(
+  cors({
+    origin: [
+      "http://localhost:3000",
+      "http://127.0.0.1:3000", // Add this line
+      "https://online-quiz-system-t7it.onrender.com",
+    ],
+    credentials:true,
+    methods: ["GET", "POST"],
+  })
+);
 
-// const allowedOrigins = [
-//   "http://localhost:3000",
-//   "http://127.0.0.1:3000",
-//   "https://online-quiz-system-front.onrender.com",
-// ];
-
-// app.use(cors({
-//   origin: allowedOrigins,
-//   credentials: true,
-//   methods: ["GET", "POST", "OPTIONS"],
-//   allowedHeaders: ["Content-Type"],
-// }));
-
-// // ✅ Handle OPTIONS preflight for all routes
-// app.options("*", cors({
-//   origin: allowedOrigins,
-//   credentials: true,
-//   methods: ["GET", "POST", "OPTIONS"],
-//   allowedHeaders: ["Content-Type"],
-// }));
-// ✅ Full CORS setup
-const allowedOrigins = [
-  "http://localhost:3000",
-  "http://127.0.0.1:3000",
-  "https://online-quiz-system-front.onrender.com",
-];
-
-app.use(cors({
-  origin: allowedOrigins,
-  credentials: true,
-  methods: ["GET", "POST", "OPTIONS"],
-  allowedHeaders: ["Content-Type"],
-}));
-
-// ✅ Handle preflight globally (fixes path-to-regexp error)
-app.options("*", (req, res) => {
-  res.sendStatus(200);
-});
 
 const client = new OpenAI({
   apiKey: process.env.OPENROUTER_API_KEY,
@@ -79,6 +53,7 @@ app.post("/chat", async (req, res) => {
   }
 });
 
+// ✅ Use Render’s provided PORT
 const PORT = process.env.PORT || 3000;
 app.listen(PORT, () => {
   console.log(`✅ Server running on port ${PORT}`);
