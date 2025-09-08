@@ -1,5 +1,3 @@
-console.log("NAT_API in window:", window.NAT_API);
-console.log("API_BASE is:", API_BASE);
 document.addEventListener("DOMContentLoaded", () => {
   gsap.registerPlugin(ScrollTrigger);
 
@@ -82,26 +80,21 @@ document.addEventListener("DOMContentLoaded", () => {
       }, 280);
     },
   });
-  // const API_BASE = window.NAT_API || "http://localhost:3000";
-
-const API_BASE =
-  window.NAT_API ||
-  (window.location.hostname === "localhost"
-    ? "http://localhost:3000"
-    : "https://online-quiz-system-t7it.onrender.com");
-
-console.log("NAT_API in window:", window.NAT_API);
-console.log("API_BASE is:", API_BASE);
-
 
   // 🔹 Call your backend AI server (DeepSeek free model)
   async function fetchAIResponse(message) {
     try {
-      const res = await fetch(`${API_BASE}/chat`, {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ message }),
-      });
+      // const res = await fetch("http://localhost:3000/chat", {
+      //   method: "POST",
+      //   headers: { "Content-Type": "application/json" },
+      //   body: JSON.stringify({ message }),
+      // });
+const res = await fetch("/chat", {
+  method: "POST",
+  headers: { "Content-Type": "application/json" },
+  body: JSON.stringify({ message }),
+});
+
 
       if (!res.ok) throw new Error("Server error");
 

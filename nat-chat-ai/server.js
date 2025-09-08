@@ -13,12 +13,14 @@ app.use(bodyParser.json());
 app.use(
   cors({
     origin: [
-      "https://online-quiz-system-front.onrender.com", // your Render frontend
-      "http://localhost:3000", // keep for local testing
+      "http://localhost:3000",
+      "http://127.0.0.1:3000", // Add this line
+      "https://online-quiz-system-t7it.onrender.com",
     ],
     methods: ["GET", "POST"],
   })
 );
+
 
 const client = new OpenAI({
   apiKey: process.env.OPENROUTER_API_KEY,
