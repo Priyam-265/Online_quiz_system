@@ -162,8 +162,8 @@ document.addEventListener("DOMContentLoaded", () => {
 
   // 🌍 Detect environment
   const isLocal =
-    window.location.hostname === "localhost" ||
-    window.location.hostname === "127.0.0.1";
+    window.location.hostname === "localhost" ?true:false;
+    // window.location.hostname === "127.0.0.1";
 
   // 🌍 Pick API base depending on environment
   const API_BASE = isLocal
