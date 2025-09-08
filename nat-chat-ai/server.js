@@ -69,28 +69,18 @@ dotenv.config();
 const app = express();
 app.use(bodyParser.json());
 
-// ✅ Allowed origins (include your frontend)
+// ✅ Allowed origins (must include your frontend!)
 const allowedOrigins = [
   "http://localhost:3000",
   "http://127.0.0.1:3000",
-  "https://online-quiz-system-front.onrender.com",
+  "https://online-quiz-system-front.onrender.com", // ✅ frontend, not backend
 ];
 
 // ✅ Global CORS middleware
 app.use(cors({
   origin: allowedOrigins,
   credentials: true,
-  methods: ["GET", "POST", "OPTIONS"],
-  allowedHeaders: ["Content-Type"],
 }));
-
-// ✅ Preflight response for all routes
-app.options("*", (req, res) => {
-  res.header("Access-Control-Allow-Origin", allowedOrigins.includes(req.headers.origin) ? req.headers.origin : "false");
-  res.header("Access-Control-Allow-Methods", "GET, POST, OPTIONS");
-  res.header("Access-Control-Allow-Headers", "Content-Type");
-  res.sendStatus(200);
-});
 
 const client = new OpenAI({
   apiKey: process.env.OPENROUTER_API_KEY,
@@ -122,6 +112,7 @@ app.post("/chat", async (req, res) => {
   }
 });
 
+// ✅ Use Render’s provided PORT
 const PORT = process.env.PORT || 3000;
 app.listen(PORT, () => {
   console.log(`✅ Server running on port ${PORT}`);
