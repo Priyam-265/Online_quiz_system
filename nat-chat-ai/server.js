@@ -14,13 +14,25 @@ app.use(
   cors({
     origin: [
       "http://localhost:3000",
-      "http://127.0.0.1:3000", // Add this line
-      "https://online-quiz-system-t7it.onrender.com",
+      "http://127.0.0.1:3000",
+      "https://online-quiz-system-front.onrender.com",
     ],
-    credentials:true,
-    methods: ["GET", "POST","OPTIONS"],
+    credentials: true,
+    methods: ["GET", "POST", "OPTIONS"],
   })
 );
+
+// Preflight for all routes
+app.options("*", cors({
+  origin: [
+    "http://localhost:3000",
+    "http://127.0.0.1:3000",
+    "https://online-quiz-system-front.onrender.com",
+  ],
+  credentials: true,
+  methods: ["GET", "POST", "OPTIONS"],
+  allowedHeaders: ["Content-Type"],
+}));
 
 
 const client = new OpenAI({
