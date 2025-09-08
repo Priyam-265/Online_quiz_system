@@ -18,7 +18,7 @@ app.use(
       "https://online-quiz-system-t7it.onrender.com",
     ],
     credentials:true,
-    methods: ["GET", "POST"],
+    methods: ["GET", "POST","OPTIONS"],
   })
 );
 
